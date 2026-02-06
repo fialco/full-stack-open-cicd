@@ -9,13 +9,12 @@
   "scripts": {
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
-    "build:ui": "rm -rf build && cd ../frontend/ && npm run build && cp -r build ../backend",
-    "deploy": "fly deploy",
-    "deploy:full": "npm run build:ui && npm run deploy",
-    "logs:prod": "fly logs",
+    "build": "rm -rf public && npm install && cd frontend/ && npm install && npm run build && cp -r dist ../public",
+    "build:ui": "rm -rf public && cd frontend/ && npm run build && cp -r dist ../public",
     "lint": "eslint .",
     "test": "NODE_ENV=test node --test",
-    "start:test": "NODE_ENV=test node index.js"  },
+    "start:test": "NODE_ENV=test node index.js"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
