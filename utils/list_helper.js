@@ -15,18 +15,19 @@ const totalLikes = (blogs) => {
 
 const favoriteBlog = (blogs) => {
   const reducer = (max, item) => {
-    return max.likes > item.likes 
-      ? max 
-      : item
+    return max.likes > item.likes ? max : item
   }
 
-  const {title, author, likes} = blogs.reduce(reducer, 0)
-  return {title, author, likes}
+  const { title, author, likes } = blogs.reduce(reducer, 0)
+  return { title, author, likes }
 }
 
 const mostBlogs = (blogs) => {
   const counts = lodash.countBy(blogs, 'author')
-  const maxBlogger = lodash.maxBy(Object.entries(counts), ([author, blogs]) => blogs)
+  const maxBlogger = lodash.maxBy(
+    Object.entries(counts),
+    ([author, blogs]) => blogs
+  )
 
   if (!maxBlogger) {
     return {
@@ -34,7 +35,7 @@ const mostBlogs = (blogs) => {
       blogs: undefined
     }
   }
-  
+
   return {
     author: maxBlogger[0],
     blogs: maxBlogger[1]
@@ -48,7 +49,10 @@ const mostLikes = (blogs) => {
     return lodash.sumBy(authorBlogs, 'likes')
   })
 
-  const maxLikes = lodash.maxBy(Object.entries(likesByAuthor), ([author, likes]) => likes)
+  const maxLikes = lodash.maxBy(
+    Object.entries(likesByAuthor),
+    ([author, likes]) => likes
+  )
 
   if (!maxLikes) {
     return {
@@ -56,7 +60,7 @@ const mostLikes = (blogs) => {
       likes: undefined
     }
   }
-  
+
   return {
     author: maxLikes[0],
     likes: maxLikes[1]

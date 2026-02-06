@@ -26,14 +26,14 @@ const Notification = ({ message, type }) => {
   //if alertType is true -> notification, if false -> error
   if (type) {
     return (
-      <div style={notification} className="notification">
+      <div style={notification} className='notification'>
         {message}
       </div>
     )
   }
 
   return (
-    <div style={error} className="error">
+    <div style={error} className='error'>
       {message}
     </div>
   )

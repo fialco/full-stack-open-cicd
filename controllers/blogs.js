@@ -3,8 +3,11 @@ const Blog = require('../models/blog')
 const userExtractor = require('../utils/middleware').userExtractor
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog
-    .find({}).populate("user", { username: 1, name: 1, id: 1,})
+  const blogs = await Blog.find({}).populate('user', {
+    username: 1,
+    name: 1,
+    id: 1
+  })
 
   response.json(blogs)
 })
@@ -16,10 +19,12 @@ blogsRouter.put('/:id', async (request, response) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes,
+    likes: body.likes
   }
 
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+    new: true
+  })
   response.json(updatedBlog)
 })
 
@@ -41,7 +46,11 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   await user.save()
 
   // Populated already for frontend
-  const populatedBlog = await savedBlog.populate("user", { username: 1, name: 1, id: 1,})
+  const populatedBlog = await savedBlog.populate('user', {
+    username: 1,
+    name: 1,
+    id: 1
+  })
 
   response.status(201).json(populatedBlog)
 })
@@ -51,7 +60,7 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
 
   const blog = await Blog.findById(request.params.id)
 
-  if ( blog.user.toString() === user._id.toString() ) {
+  if (blog.user.toString() === user._id.toString()) {
     await Blog.findByIdAndDelete(request.params.id)
     response.status(204).end()
   } else {

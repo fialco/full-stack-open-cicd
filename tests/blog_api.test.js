@@ -26,15 +26,14 @@ describe('when there are some blogs saved initially', () => {
       id: user._id
     }
 
-    token = jwt.sign(userForToken, process.env.SECRET, { expiresIn: 60*60 })
+    token = jwt.sign(userForToken, process.env.SECRET, { expiresIn: 60 * 60 })
   })
 
   beforeEach(async () => {
     await Blog.deleteMany({})
 
-    const blogObjects = helper.initialBlogs
-      .map(blog => new Blog(blog))
-    const promiseArray = blogObjects.map(blog => blog.save())
+    const blogObjects = helper.initialBlogs.map((blog) => new Blog(blog))
+    const promiseArray = blogObjects.map((blog) => blog.save())
     await Promise.all(promiseArray)
   })
 
@@ -55,11 +54,13 @@ describe('when there are some blogs saved initially', () => {
     const blogsInDb = await helper.blogsInDb()
 
     assert(blogsInDb.every((blog) => blog.hasOwnProperty('id')))
-    assert.strictEqual(blogsInDb.every((blog) => blog.hasOwnProperty('_id')), false)
+    assert.strictEqual(
+      blogsInDb.every((blog) => blog.hasOwnProperty('_id')),
+      false
+    )
   })
 
   describe('addition of a new blog', () => {
-
     test('a valid blog can be added', async () => {
       const newBlog = {
         title: 'Testing blog v.1.0',
@@ -77,8 +78,8 @@ describe('when there are some blogs saved initially', () => {
 
       const response = await api.get('/api/blogs')
 
-      const title = response.body.map(r => r.title)
-      const author = response.body.map(r => r.author)
+      const title = response.body.map((r) => r.title)
+      const author = response.body.map((r) => r.author)
 
       assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
 
@@ -90,7 +91,7 @@ describe('when there are some blogs saved initially', () => {
       const newBlog = {
         title: 'Testing non-likes v.1.2',
         author: 'Taneli Tykkääjä',
-        url: 'testaajat.com',
+        url: 'testaajat.com'
       }
 
       await api
@@ -104,7 +105,9 @@ describe('when there are some blogs saved initially', () => {
 
       assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
 
-      const addedBlog = response.body.filter(blog => blog.title === 'Testing non-likes v.1.2')
+      const addedBlog = response.body.filter(
+        (blog) => blog.title === 'Testing non-likes v.1.2'
+      )
 
       assert.strictEqual(addedBlog[0].likes, 0)
     })
@@ -112,7 +115,7 @@ describe('when there are some blogs saved initially', () => {
     test('without title not added', async () => {
       const newBlog = {
         author: 'Taneli Tykkääjä',
-        url: 'testaajat.com',
+        url: 'testaajat.com'
       }
 
       await api
@@ -129,7 +132,7 @@ describe('when there are some blogs saved initially', () => {
     test('without url not added', async () => {
       const newBlog = {
         title: 'Testing non-likes v.1.2',
-        author: 'Taneli Tykkääjä',
+        author: 'Taneli Tykkääjä'
       }
 
       await api
@@ -146,13 +149,10 @@ describe('when there are some blogs saved initially', () => {
     test('without a token not added', async () => {
       const newBlog = {
         title: 'Testing non-tokens v.1.5',
-        author: 'Taneli Tykkääjä',
+        author: 'Taneli Tykkääjä'
       }
 
-      await api
-        .post('/api/blogs')
-        .send(newBlog)
-        .expect(401)
+      await api.post('/api/blogs').send(newBlog).expect(401)
 
       const response = await api.get('/api/blogs')
 
@@ -161,7 +161,6 @@ describe('when there are some blogs saved initially', () => {
   })
 
   describe('deletion of a blog', () => {
-
     test('succeeds with status code 204 if id is valid', async () => {
       const newBlog = {
         title: 'Testing blog v.1.0',
@@ -192,7 +191,7 @@ describe('when there are some blogs saved initially', () => {
 
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
 
-      const titles = blogsAtEnd.map(r => r.title)
+      const titles = blogsAtEnd.map((r) => r.title)
       assert(!titles.includes(blogToDelete.title))
     })
 
@@ -228,32 +227,30 @@ describe('when there are some blogs saved initially', () => {
 
       const blogToDelete = response.body[response.body.length - 1]
 
-      await api
-        .delete(`/api/blogs/${blogToDelete.id}`)
-        .expect(401)
+      await api.delete(`/api/blogs/${blogToDelete.id}`).expect(401)
 
       const blogsAtEnd = await helper.blogsInDb()
 
-      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length +1)
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
     })
   })
 
   describe('updating a blog', () => {
-
     test('succeeds with status code 204 if id is valid', async () => {
       const blogsAtStart = await helper.blogsInDb()
 
-      const blogToUpdate = blogsAtStart.filter(blog => blog.title === 'TDD harms architecture')[0]
+      const blogToUpdate = blogsAtStart.filter(
+        (blog) => blog.title === 'TDD harms architecture'
+      )[0]
 
-      const blogUpdate = {...blogToUpdate, likes: 15}
+      const blogUpdate = { ...blogToUpdate, likes: 15 }
 
-      await api
-        .put(`/api/blogs/${blogUpdate.id}`)
-        .send(blogUpdate)
-        .expect(200)
+      await api.put(`/api/blogs/${blogUpdate.id}`).send(blogUpdate).expect(200)
 
       const blogsAtEnd = await helper.blogsInDb()
-      const updatedBlog = blogsAtEnd.filter(blog => blog.title === 'TDD harms architecture')[0]
+      const updatedBlog = blogsAtEnd.filter(
+        (blog) => blog.title === 'TDD harms architecture'
+      )[0]
 
       assert.strictEqual(updatedBlog.likes, 15)
     })
@@ -261,14 +258,13 @@ describe('when there are some blogs saved initially', () => {
     test('fail with status code 400 if id is invalid', async () => {
       const blogsAtStart = await helper.blogsInDb()
 
-      const blogToUpdate = blogsAtStart.filter(blog => blog.title === 'TDD harms architecture')[0]
+      const blogToUpdate = blogsAtStart.filter(
+        (blog) => blog.title === 'TDD harms architecture'
+      )[0]
 
-      const blogUpdate = {...blogToUpdate, likes: 15}
+      const blogUpdate = { ...blogToUpdate, likes: 15 }
 
-      await api
-        .put(`/api/blogs/asdf456`)
-        .send(blogUpdate)
-        .expect(400)
+      await api.put(`/api/blogs/asdf456`).send(blogUpdate).expect(400)
 
       const blogsAtEnd = await helper.blogsInDb()
 
@@ -276,7 +272,6 @@ describe('when there are some blogs saved initially', () => {
     })
   })
 })
-
 
 after(async () => {
   await mongoose.connection.close()

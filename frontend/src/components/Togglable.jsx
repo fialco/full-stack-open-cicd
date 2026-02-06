@@ -28,7 +28,6 @@ const Togglable = forwardRef((props, ref) => {
       </div>
     </div>
   )
-
 })
 
 Togglable.propTypes = {

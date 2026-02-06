@@ -20,7 +20,7 @@ const Blog = ({ blog, updatedBlog, user, deleteBlog }) => {
       likes: updatedLikes,
       title: blog.title,
       author: blog.author,
-      url: blog.url,
+      url: blog.url
     })
   }
 
@@ -30,26 +30,29 @@ const Blog = ({ blog, updatedBlog, user, deleteBlog }) => {
     }
   }
 
-  const showDeleteButton = blog.user && user && blog.user.username === user.username
+  const showDeleteButton =
+    blog.user && user && blog.user.username === user.username
 
   if (expanded) {
     return (
-      <div className="blog" style={blogStyle}>
+      <div className='blog' style={blogStyle}>
         <div>
-          {blog.title} {blog.author} <button onClick={() => setExpanded(false)}>hide</button>
+          {blog.title} {blog.author}{' '}
+          <button onClick={() => setExpanded(false)}>hide</button>
         </div>
-        <div>
-          {blog.url}
-        </div>
+        <div>{blog.url}</div>
         <div>
           likes {likes} <button onClick={() => likeBlog()}>like</button>
         </div>
-        <div>
-          {blog.user.name}
-        </div>
+        <div>{blog.user.name}</div>
         {showDeleteButton && (
           <div>
-            <button onClick={() => handleDelete()} style={{ backgroundColor: 'cornflowerblue', color: 'black' }}>remove</button>
+            <button
+              onClick={() => handleDelete()}
+              style={{ backgroundColor: 'cornflowerblue', color: 'black' }}
+            >
+              remove
+            </button>
           </div>
         )}
       </div>
@@ -57,11 +60,13 @@ const Blog = ({ blog, updatedBlog, user, deleteBlog }) => {
   }
 
   return (
-    <div className="blog" style={blogStyle}>
+    <div className='blog' style={blogStyle}>
       <div>
-        {blog.title} {blog.author} <button onClick={() => setExpanded(true)}>view</button>
+        {blog.title} {blog.author}{' '}
+        <button onClick={() => setExpanded(true)}>view</button>
       </div>
     </div>
-  )}
+  )
+}
 
 export default Blog
