@@ -13,6 +13,7 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 describe('when there are some blogs saved initially', () => {
+  let token
   before(async () => {
     await User.deleteMany({})
 
@@ -53,9 +54,15 @@ describe('when there are some blogs saved initially', () => {
   test('blog identifiers are named id and instead of _id', async () => {
     const blogsInDb = await helper.blogsInDb()
 
-    assert(blogsInDb.every((blog) => blog.hasOwnProperty('id')))
+    assert(
+      blogsInDb.every((blog) =>
+        Object.prototype.hasOwnProperty.call(blog, 'id')
+      )
+    )
     assert.strictEqual(
-      blogsInDb.every((blog) => blog.hasOwnProperty('_id')),
+      blogsInDb.every((blog) =>
+        Object.prototype.hasOwnProperty.call(blog, '_id')
+      ),
       false
     )
   })

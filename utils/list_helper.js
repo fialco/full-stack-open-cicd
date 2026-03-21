@@ -1,7 +1,6 @@
 const lodash = require('lodash')
-const blog = require('../models/blog')
 
-const dummy = (blogs) => {
+const dummy = (_blogs) => {
   return 1
 }
 
@@ -26,7 +25,7 @@ const mostBlogs = (blogs) => {
   const counts = lodash.countBy(blogs, 'author')
   const maxBlogger = lodash.maxBy(
     Object.entries(counts),
-    ([author, blogs]) => blogs
+    ([_author, blogs]) => blogs
   )
 
   if (!maxBlogger) {
@@ -51,7 +50,7 @@ const mostLikes = (blogs) => {
 
   const maxLikes = lodash.maxBy(
     Object.entries(likesByAuthor),
-    ([author, likes]) => likes
+    ([_author, likes]) => likes
   )
 
   if (!maxLikes) {

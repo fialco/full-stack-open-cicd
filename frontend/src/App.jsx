@@ -13,7 +13,15 @@ const App = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      blogService.setToken(user.token)
+      return user
+    }
+    return null
+  })
 
   const [alertMessage, setAlertMessage] = useState(null)
   //if alertType is true -> notification, if false -> error
@@ -21,15 +29,6 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
-  }, [])
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
   }, [])
 
   const handleLogin = async (event) => {
@@ -47,6 +46,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
+      console.error(exception)
       setAlertMessage('wrong username or password')
       setAlertType(false)
       setTimeout(() => {
@@ -82,34 +82,10 @@ const App = () => {
       .then(setBlogs(blogs.filter((blog) => blog.id !== id)))
   }
 
-  const handleLogout = (event) => {
+  const handleLogout = (_event) => {
     window.localStorage.removeItem('loggedBlogappUser')
     window.location.reload()
   }
-
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
-          type='text'
-          value={username}
-          name='Username'
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-        <input
-          type='password'
-          value={password}
-          name='Password'
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type='submit'>login</button>
-    </form>
-  )
 
   const blogFormRef = useRef()
 

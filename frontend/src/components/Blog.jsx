@@ -12,7 +12,7 @@ const Blog = ({ blog, updatedBlog, user, deleteBlog }) => {
     marginBottom: 5
   }
 
-  const likeBlog = (event) => {
+  const likeBlog = (_event) => {
     const updatedLikes = likes + 1
     setLikes(updatedLikes)
     updatedBlog(blog.id, {
