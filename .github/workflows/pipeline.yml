@@ -39,6 +39,8 @@ jobs:
         run: npm install
       - name: Check formatting
         run: npx prettier . --check
+      - name: Check linting
+        run: npm run lint
       - name: Run frontend tests
         working-directory: frontend
         run: npm run test
