@@ -12,7 +12,7 @@
     "build": "rm -rf public && npm install && cd frontend/ && npm install && npm run build && cp -r dist ../public",
     "build:ui": "rm -rf public && cd frontend/ && npm run build && cp -r dist ../public",
     "lint": "eslint .",
-    "test": "NODE_ENV=test node --test",
+    "test": "NODE_ENV=test node --test --test-concurrency=1",
     "start:test": "NODE_ENV=test node index.js"
   },
   "dependencies": {
