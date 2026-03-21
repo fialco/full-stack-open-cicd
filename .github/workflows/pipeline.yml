@@ -34,9 +34,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Install backend dependencies
+        run: npm ci
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm install
+        run: npm ci
       - name: Check formatting
         run: npx prettier . --check
       - name: Check linting
